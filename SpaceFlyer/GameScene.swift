@@ -8,14 +8,13 @@
 
 import SpriteKit
 import GameplayKit
-import CoreMotion
 
 
 class GameScene: SKScene {
     
     private let player = SKSpriteNode(imageNamed: "player-rocket.png")
     private var touchingPlayer = false
-    private let motionManager = CMMotionManager()
+    private var gameTimer: Timer?
     
     
     private func addBackground() {
@@ -38,14 +37,27 @@ class GameScene: SKScene {
         addChild(player)
     }
     
+    @objc
+    private func createAsteroid() {
+        let randomDistribution = GKRandomDistribution(lowestValue: -200, highestValue: 200)
+        let asteroid = SKSpriteNode(imageNamed: "asteroid")
+        asteroid.position = CGPoint(x: 350, y: randomDistribution.nextInt())
+        asteroid.name = "asteroid"
+        asteroid.zPosition = 1
+        addChild(asteroid)
+        
+        asteroid.physicsBody = SKPhysicsBody(texture: asteroid.texture!, size: asteroid.size)
+        asteroid.physicsBody?.velocity = CGVector(dx: -100, dy: 0)
+        asteroid.physicsBody?.linearDamping = 0
+        asteroid.physicsBody?.affectedByGravity = false
+    }
+    
     override func didMove(to view: SKView) {
         addBackground()
         addParticles()
         addPlayer()
         
-        motionManager.startAccelerometerUpdates()
-        
-        self.physicsBody = SKPhysicsBody(edgeLoopFrom: view.bounds)
+        gameTimer = Timer.scheduledTimer(timeInterval: 1.35, target: self, selector: #selector(createAsteroid), userInfo: nil, repeats: true)
     }
     
     func touchDown(atPoint pos : CGPoint) {
