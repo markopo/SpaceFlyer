@@ -15,6 +15,7 @@
 		0B16C51E221C7BFC001B9828 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0B16C51C221C7BFC001B9828 /* Main.storyboard */; };
 		0B16C520221C7BFE001B9828 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0B16C51F221C7BFE001B9828 /* Assets.xcassets */; };
 		0B16C523221C7BFE001B9828 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0B16C521221C7BFE001B9828 /* LaunchScreen.storyboard */; };
+		0B16C52B221C8128001B9828 /* SpaceDust.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0B16C52A221C8128001B9828 /* SpaceDust.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		0B16C51F221C7BFE001B9828 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0B16C522221C7BFE001B9828 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0B16C524221C7BFE001B9828 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0B16C52A221C8128001B9828 /* SpaceDust.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = SpaceDust.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 				0B16C51F221C7BFE001B9828 /* Assets.xcassets */,
 				0B16C521221C7BFE001B9828 /* LaunchScreen.storyboard */,
 				0B16C524221C7BFE001B9828 /* Info.plist */,
+				0B16C52A221C8128001B9828 /* SpaceDust.sks */,
 			);
 			path = SpaceFlyer;
 			sourceTree = "<group>";
@@ -135,6 +138,7 @@
 				0B16C515221C7BFC001B9828 /* GameScene.sks in Resources */,
 				0B16C520221C7BFE001B9828 /* Assets.xcassets in Resources */,
 				0B16C523221C7BFE001B9828 /* LaunchScreen.storyboard in Resources */,
+				0B16C52B221C8128001B9828 /* SpaceDust.sks in Resources */,
 				0B16C517221C7BFC001B9828 /* Actions.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
