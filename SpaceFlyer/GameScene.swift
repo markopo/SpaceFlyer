@@ -15,6 +15,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let player = SKSpriteNode(imageNamed: "player-rocket.png")
     private var touchingPlayer = false
     private var gameTimer: Timer?
+    private let interval: Double = 1.0 
+    private var gameTime: Int = 1
+    private var numOfAsteroids = 1
+    
     private let lifeLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-Bold")
     private let scoreLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-Bold")
     private let gameOverLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-Bold")
@@ -30,6 +34,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var life = 10 {
         didSet {
             lifeLabel.text = "Life: \(life)"
+            let alpha = CGFloat(life)/10
+
+            if(alpha > 0.3) {
+                player.run(SKAction.fadeAlpha(to: alpha, duration: 1))
+            }
         }
     }
     
@@ -49,6 +58,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     private func addPlayer() {
+        player.alpha = 1.0
         player.position.x = -player.size.width
         player.zPosition = 1
         player.physicsBody = SKPhysicsBody(texture: player.texture!, size: player.size)
@@ -86,6 +96,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     private func gameOver() {
+        gameTime = 1
         gameOverLabel.text = "GAME OVER!"
         gameOverLabel.name = "game_over"
         gameOverLabel.position.x = 0
@@ -103,20 +114,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     @objc
     private func createAsteroid() {
-        let randomDistribution = GKRandomDistribution(lowestValue: -100, highestValue: 100)
+        
+        gameTime += 1
+        let lowValue = -100 - gameTime
+        let highValue = 100 + gameTime
+        let randomDistribution = GKRandomDistribution(lowestValue: lowValue, highestValue: highValue)
         let asteroid = SKSpriteNode(imageNamed: "asteroid")
         asteroid.position = CGPoint(x: 350, y: randomDistribution.nextInt())
         asteroid.name = "asteroid"
         asteroid.zPosition = 1
         addChild(asteroid)
         
+        var velX = -100 - gameTime
+        var velY = gameTime % 2 == 0 ? gameTime : -gameTime
+        
+        if(gameTime % 5 == 0) {
+            velX *= 2
+            velY = 0
+        }
+        
         asteroid.physicsBody = SKPhysicsBody(texture: asteroid.texture!, size: asteroid.size)
-        asteroid.physicsBody?.velocity = CGVector(dx: -100, dy: 0)
+        asteroid.physicsBody?.velocity = CGVector(dx: velX, dy: velY)
         asteroid.physicsBody?.linearDamping = 0
         asteroid.physicsBody?.affectedByGravity = false
         asteroid.physicsBody?.contactTestBitMask = 1
         asteroid.physicsBody?.categoryBitMask = 0
         
+        print("asteroid: T:\(gameTime) V: \(velX) L: \(lowValue) H: \(highValue)")
+
         createEnergy()
     }
     
@@ -129,9 +154,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         energy.zPosition = 1
         addChild(energy)
         
+        var velY = 0
+        var velX = -50
+        
+        if(gameTime % 8 == 0) {
+            let randNum = Int(arc4random_uniform(100))
+            velY = gameTime % 2 == 0 ? -randNum : randNum
+            velX = -20
+        }
+        
+        var angDamp: CGFloat = 0.0
+        if(gameTime % 12 == 0){
+            angDamp = 0.5
+        }
+        
         energy.physicsBody = SKPhysicsBody(texture: energy.texture!, size: energy.size)
-        energy.physicsBody?.velocity = CGVector(dx: -100, dy: 0)
+        energy.physicsBody?.velocity = CGVector(dx: velX, dy: velY)
         energy.physicsBody?.linearDamping = 0
+        energy.physicsBody?.linearDamping = angDamp
         energy.physicsBody?.affectedByGravity = false
         energy.physicsBody?.contactTestBitMask = 1
         energy.physicsBody?.categoryBitMask = 0
@@ -145,7 +185,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addLifeLabel()
         addMusic()
         
-        gameTimer = Timer.scheduledTimer(timeInterval: 1.35, target: self, selector: #selector(createAsteroid), userInfo: nil, repeats: true)
+        gameTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(createAsteroid), userInfo: nil, repeats: true)
     }
     
     override func didMove(to view: SKView) {
@@ -230,6 +270,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func collectEnergy(node: SKNode) {
         score += 1
         node.removeFromParent()
+        
+        if(score % 5 == 0) {
+            if(life < 10) {
+                life += 1
+            }
+        }
         
         let bonusSound = SKAction.playSoundFileNamed("bonus.wav", waitForCompletion: false)
         run(bonusSound)
