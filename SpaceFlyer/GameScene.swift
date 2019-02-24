@@ -15,12 +15,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let player = SKSpriteNode(imageNamed: "player-rocket.png")
     private var touchingPlayer = false
     private var gameTimer: Timer?
+    private let lifeLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-Bold")
     private let scoreLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-Bold")
     private let gameOverLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-Bold")
+    private let music = SKAudioNode(fileNamed: "cyborg-ninja.mp3")
+   
     
     var score = 0 {
         didSet {
               scoreLabel.text = "Score: \(score)"
+        }
+    }
+    
+    var life = 10 {
+        didSet {
+            lifeLabel.text = "Life: \(life)"
         }
     }
     
@@ -52,9 +61,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private func addScoreLabel() {
         scoreLabel.zPosition = 2
-        scoreLabel.position.y = 300
+        scoreLabel.fontSize = 16
+        scoreLabel.position.y = (self.size.height / 2) - 15
+        scoreLabel.position.x = (-(self.size.width / 2))+80
+        scoreLabel.horizontalAlignmentMode = .right
         score = 0
         addChild(scoreLabel)
+    }
+    
+    private func addLifeLabel() {
+        lifeLabel.zPosition = 2
+        lifeLabel.fontSize = 16
+        lifeLabel.position.y = (self.size.height / 2) - 15
+        lifeLabel.position.x = (-(self.size.width / 2))+160
+        lifeLabel.horizontalAlignmentMode = .right
+        life = 10
+        addChild(lifeLabel)
+    }
+    
+    private func addMusic() {
+        addChild(music)
+        music.run(SKAction.play())
+        
     }
     
     private func gameOver() {
@@ -68,8 +96,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             addChild(gameOverLabel)
         }
         
-        
+        music.run(SKAction.pause())
     }
+    
+    
     
     @objc
     private func createAsteroid() {
@@ -112,6 +142,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addParticles()
         addPlayer()
         addScoreLabel()
+        addLifeLabel()
+        addMusic()
         
         gameTimer = Timer.scheduledTimer(timeInterval: 1.35, target: self, selector: #selector(createAsteroid), userInfo: nil, repeats: true)
     }
@@ -179,31 +211,43 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         if nodeA == player && nodeB.name == "asteroid" {
-            // print("player -> asteroid")
-            playerHit(node: nodeB)
+            playerHit()
         }
         else if(nodeA.name == "asteroid" && nodeB == player){
-            // print("asteroid -> player")
-            playerHit(node: nodeA)
+            playerHit()
         }
       
         
         if(nodeA == player && nodeB.name == "energy"){
-          //  print("player -> energy")
-            score += 1
-            nodeB.removeFromParent()
+            collectEnergy(node: nodeB)
         }
         else if(nodeA.name == "energy" && nodeB == player) {
-           // print("energy -> player")
-            score += 1
-            nodeA.removeFromParent()
+            collectEnergy(node: nodeA)
         }
         
     }
     
-    func playerHit(node: SKNode) {
-        player.removeFromParent()
-        gameOverLabel.isHidden = false
-        gameOver()
+    func collectEnergy(node: SKNode) {
+        score += 1
+        node.removeFromParent()
+        
+        let bonusSound = SKAction.playSoundFileNamed("bonus.wav", waitForCompletion: false)
+        run(bonusSound)
+    }
+    
+    func playerHit() {
+   
+        if(life > 0) {
+            life -= 1
+        }
+      
+        let explosionSound = SKAction.playSoundFileNamed("explosion.wav", waitForCompletion: false)
+        run(explosionSound)
+        
+        if(life == 0) {
+            player.removeFromParent()
+            gameOverLabel.isHidden = false
+            gameOver()
+        }
     }
 }
