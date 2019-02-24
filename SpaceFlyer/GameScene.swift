@@ -63,7 +63,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameOverLabel.position.x = 0
         gameOverLabel.position.y = 0
         gameOverLabel.zPosition = 3
-        addChild(gameOverLabel)
+        
+        if(self.childNode(withName: "game_over") == nil) {
+            addChild(gameOverLabel)
+        }
         
         
     }
@@ -142,6 +145,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if(tappedNodes.contains(gameOverLabel)) {
             removeAllChildren();
+            gameOverLabel.isHidden = true
             startGame()
         }
     }
@@ -175,18 +179,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         if nodeA == player && nodeB.name == "asteroid" {
+            // print("player -> asteroid")
             playerHit(node: nodeB)
         }
         else if(nodeA.name == "asteroid" && nodeB == player){
+            // print("asteroid -> player")
             playerHit(node: nodeA)
         }
       
         
         if(nodeA == player && nodeB.name == "energy"){
+          //  print("player -> energy")
             score += 1
             nodeB.removeFromParent()
         }
         else if(nodeA.name == "energy" && nodeB == player) {
+           // print("energy -> player")
             score += 1
             nodeA.removeFromParent()
         }
@@ -195,6 +203,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func playerHit(node: SKNode) {
         player.removeFromParent()
+        gameOverLabel.isHidden = false
         gameOver()
     }
 }
