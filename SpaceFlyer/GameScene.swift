@@ -37,7 +37,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var life = 100 {
         didSet {
             lifeLabel.text = "Life: \(life)"
-            let alpha = CGFloat(life)/10
+            let alpha = CGFloat(life)/100
 
             if(alpha > 0.3) {
                 player.run(SKAction.fadeAlpha(to: alpha, duration: 1))
@@ -120,6 +120,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             addChild(gameOverLabel)
         }
         
+        for node in self.children {
+            if(node.name == "asteroid" || node.name == "energy") {
+                node.removeFromParent()
+            }
+        }
+        
+        gameTimer?.invalidate()
         music.run(SKAction.pause())
     }
     
@@ -203,6 +210,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         motionManager.startAccelerometerUpdates()
         
         gameTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(createAsteroid), userInfo: nil, repeats: true)
+        gameTimer?.fire()
     }
     
     override func didMove(to view: SKView) {
@@ -228,12 +236,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let location = touch.location(in: self)
         let tappedNodes = nodes(at: location)
         
-        /**
-        if tappedNodes.contains(player) {
-            touchingPlayer = true
-        }
-        */
-        
         if(tappedNodes.contains(gameOverLabel)) {
             self.removeAllChildren()
             gameOverLabel.isHidden = true
@@ -257,6 +259,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+        
+            // remove asteroids out of screen
+            removeNodesOutOfScreen()
 
             if let accelerometerData = motionManager.accelerometerData {
                 let changeY = CGFloat(accelerometerData.acceleration.y) * 10
@@ -291,14 +296,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    private func removeNodesOutOfScreen() {
+        for node in self.children {
+            if((node.name == "asteroid" || node.name == "energy") && !self.intersects(node) && node.position.x <= (-self.position.x/2)){
+               // print("removed: \(node.name!)")
+                node.removeFromParent()
+            }
+            
+        }
+    }
+    
     func collectEnergy(node: SKNode) {
         score += 1
         node.removeFromParent()
         
-        if(score % 5 == 0) {
-            if(life < 10) {
-                life += 1
-            }
+        if(life <= 100) {
+            life += 1
         }
         
         let bonusSound = SKAction.playSoundFileNamed("bonus.wav", waitForCompletion: false)
