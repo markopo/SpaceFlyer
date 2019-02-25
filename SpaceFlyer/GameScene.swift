@@ -8,6 +8,7 @@
 
 import SpriteKit
 import GameplayKit
+import CoreMotion
 
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -15,7 +16,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let player = SKSpriteNode(imageNamed: "player-rocket.png")
     private var touchingPlayer = false
     private var gameTimer: Timer?
-    private let interval: Double = 1.0
+    private let interval: Double = 3.0
     private var gameTime: Int = 1
     private var numOfAsteroids = 1
     
@@ -23,6 +24,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let scoreLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-Bold")
     private let gameOverLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-Bold")
     private let music = SKAudioNode(fileNamed: "cyborg-ninja.mp3")
+    
+    private let motionManager = CMMotionManager()
    
     
     var score = 0 {
@@ -31,7 +34,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    var life = 10 {
+    var life = 100 {
         didSet {
             lifeLabel.text = "Life: \(life)"
             let alpha = CGFloat(life)/10
@@ -62,8 +65,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.position.x = -player.size.width
         player.zPosition = 1
         player.physicsBody = SKPhysicsBody(texture: player.texture!, size: player.size)
-        player.physicsBody?.categoryBitMask = 1
+        player.physicsBody?.angularVelocity = 0
+        player.physicsBody?.allowsRotation = false 
+        player.physicsBody?.categoryBitMask = 3
+        player.physicsBody?.collisionBitMask = 3
+        player.physicsBody?.contactTestBitMask = 3
         player.physicsBody?.affectedByGravity = false
+        
+        let xRange = SKRange(lowerLimit: -self.size.width/2+10, upperLimit: self.size.width/2-10)
+        let yRange = SKRange(lowerLimit: -self.size.height/2+10, upperLimit: self.size.height/2-10)
+        
+        player.constraints = [ SKConstraint.positionX(xRange), SKConstraint.positionY(yRange)  ]
+        
         addChild(player)
         
         physicsWorld.contactDelegate = self
@@ -85,7 +98,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         lifeLabel.position.y = (self.size.height / 2) - 15
         lifeLabel.position.x = (-(self.size.width / 2))+160
         lifeLabel.horizontalAlignmentMode = .right
-        life = 10
+        life = 100
         addChild(lifeLabel)
     }
     
@@ -125,7 +138,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         asteroid.zPosition = 1
         addChild(asteroid)
         
-        var velX = -100 - gameTime
+        var velX = -50 - gameTime
         var velY = gameTime % 2 == 0 ? gameTime : -gameTime
         
         if(gameTime % 5 == 0) {
@@ -137,8 +150,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         asteroid.physicsBody?.velocity = CGVector(dx: velX, dy: velY)
         asteroid.physicsBody?.linearDamping = 0
         asteroid.physicsBody?.affectedByGravity = false
-        asteroid.physicsBody?.contactTestBitMask = 1
-        asteroid.physicsBody?.categoryBitMask = 0
+        asteroid.physicsBody?.contactTestBitMask = 2
+        asteroid.physicsBody?.collisionBitMask = 2
+        asteroid.physicsBody?.categoryBitMask = 2
         
        //  print("asteroid: T:\(gameTime) V: \(velX) L: \(lowValue) H: \(highValue)")
 
@@ -173,8 +187,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         energy.physicsBody?.linearDamping = 0
         energy.physicsBody?.linearDamping = angDamp
         energy.physicsBody?.affectedByGravity = false
-        energy.physicsBody?.contactTestBitMask = 1
-        energy.physicsBody?.categoryBitMask = 0
+        energy.physicsBody?.contactTestBitMask = 2
+        energy.physicsBody?.collisionBitMask = 2
+        energy.physicsBody?.categoryBitMask = 2
     }
     
     func startGame() {
@@ -184,6 +199,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addScoreLabel()
         addLifeLabel()
         addMusic()
+        
+        motionManager.startAccelerometerUpdates()
         
         gameTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(createAsteroid), userInfo: nil, repeats: true)
     }
@@ -211,23 +228,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let location = touch.location(in: self)
         let tappedNodes = nodes(at: location)
         
+        /**
         if tappedNodes.contains(player) {
             touchingPlayer = true
         }
+        */
         
         if(tappedNodes.contains(gameOverLabel)) {
-            removeAllChildren();
+            self.removeAllChildren()
             gameOverLabel.isHidden = true
             startGame()
         }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard touchingPlayer else { return }
-        guard let touch = touches.first else { return }
         
-        let location = touch.location(in: self)
-        player.position = location
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -242,8 +257,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
-        
+
+            if let accelerometerData = motionManager.accelerometerData {
+                let changeY = CGFloat(accelerometerData.acceleration.y) * 10
+                let changeX = CGFloat(accelerometerData.acceleration.x) * 10
+
+                player.position.x += changeX
+                player.position.y -= changeY
+            }
     }
+        
+    
     
     func didBegin(_ contact: SKPhysicsContact) {
         guard let nodeA = contact.bodyA.node else { return }
