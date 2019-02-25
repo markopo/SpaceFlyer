@@ -15,7 +15,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let player = SKSpriteNode(imageNamed: "player-rocket.png")
     private var touchingPlayer = false
     private var gameTimer: Timer?
-    private let interval: Double = 1.0 
+    private let interval: Double = 1.0
     private var gameTime: Int = 1
     private var numOfAsteroids = 1
     
@@ -140,7 +140,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         asteroid.physicsBody?.contactTestBitMask = 1
         asteroid.physicsBody?.categoryBitMask = 0
         
-        print("asteroid: T:\(gameTime) V: \(velX) L: \(lowValue) H: \(highValue)")
+       //  print("asteroid: T:\(gameTime) V: \(velX) L: \(lowValue) H: \(highValue)")
 
         createEnergy()
     }
