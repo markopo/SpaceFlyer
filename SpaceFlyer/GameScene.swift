@@ -16,7 +16,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let player = SKSpriteNode(imageNamed: "player-rocket.png")
     private var touchingPlayer = false
     private var gameTimer: Timer?
-    private let interval: Double = 3.0
+    private let interval: Double = 2.5
     private var gameTime: Int = 1
     private var numOfAsteroids = 1
     
@@ -136,8 +136,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private func createAsteroid() {
         
         gameTime += 1
-        let lowValue = -100 - gameTime
-        let highValue = 100 + gameTime
+        let h = self.scene!.size.height
+        let lowValue: Int = -Int(h/2)
+        let highValue: Int = Int(h/2)
         let randomDistribution = GKRandomDistribution(lowestValue: lowValue, highestValue: highValue)
         let asteroid = SKSpriteNode(imageNamed: "asteroid")
         asteroid.position = CGPoint(x: 350, y: randomDistribution.nextInt())
@@ -168,7 +169,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     @objc
     private func createEnergy() {
-        let randomDistribution = GKRandomDistribution(lowestValue: -300, highestValue: 300)
+        
+        let h = self.scene!.size.height
+        let lowValue: Int = -Int(h/2)
+        let highValue: Int = Int(h/2)
+        let randomDistribution = GKRandomDistribution(lowestValue: lowValue, highestValue: highValue)
         let energy = SKSpriteNode(imageNamed: "energy")
         energy.position = CGPoint(x: 350, y: randomDistribution.nextInt())
         energy.name = "energy"
@@ -267,8 +272,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let changeY = CGFloat(accelerometerData.acceleration.y) * 10
                 let changeX = CGFloat(accelerometerData.acceleration.x) * 10
 
-                player.position.x += changeX
-                player.position.y -= changeY
+                player.position.x -= changeX
+                player.position.y += changeY
             }
     }
         
