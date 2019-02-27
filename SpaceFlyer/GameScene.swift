@@ -24,6 +24,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let scoreLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-Bold")
     private let gameOverLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-Bold")
     private let music = SKAudioNode(fileNamed: "cyborg-ninja.mp3")
+
     
     private let motionManager = CMMotionManager()
    
@@ -47,7 +48,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     private func addBackground() {
-        let background = SKSpriteNode(imageNamed: "space.jpg")
+        let background = SKSpriteNode(imageNamed: "background_all.png") // "space.jpg"
         background.zPosition = -1
         addChild(background)
     }
@@ -135,17 +136,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     @objc
     private func createAsteroid() {
         
+        let enemyAtlas = SKTextureAtlas(named: "Sprites")
+        var enemyFrames: [SKTexture] = []
+        let numImages = enemyAtlas.textureNames.count
+        
+        for i in 1...numImages {
+            let textureName = "enemy1fly_\(i)"
+            enemyFrames.append(enemyAtlas.textureNamed(textureName))
+        }
+        
+        let image = enemyFrames[0]
         gameTime += 1
         let h = self.scene!.size.height
         let lowValue: Int = -Int(h/2)
         let highValue: Int = Int(h/2)
         let randomDistribution = GKRandomDistribution(lowestValue: lowValue, highestValue: highValue)
-        let asteroid = SKSpriteNode(imageNamed: "asteroid")
+        let asteroid = SKSpriteNode(texture: image) // "asteroid"
+        
+        asteroid.size = CGSize(width: 98, height: 98)
         asteroid.position = CGPoint(x: 350, y: randomDistribution.nextInt())
         asteroid.name = "asteroid"
         asteroid.zPosition = 1
         addChild(asteroid)
-        
+
         var velX = -50 - gameTime
         var velY = gameTime % 2 == 0 ? gameTime : -gameTime
         
@@ -154,6 +167,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             velY = 0
         }
         
+        
+        asteroid.physicsBody?.angularVelocity = 0
+        asteroid.physicsBody?.allowsRotation = false
         asteroid.physicsBody = SKPhysicsBody(texture: asteroid.texture!, size: asteroid.size)
         asteroid.physicsBody?.velocity = CGVector(dx: velX, dy: velY)
         asteroid.physicsBody?.linearDamping = 0
@@ -162,6 +178,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         asteroid.physicsBody?.collisionBitMask = 2
         asteroid.physicsBody?.categoryBitMask = 2
         
+        asteroid.run(SKAction.repeatForever(
+                     SKAction.animate(with: enemyFrames,
+                                     timePerFrame: 0.1,
+                                     resize: false,
+                                     restore: true)),
+                             withKey:"enemyFlying")
        //  print("asteroid: T:\(gameTime) V: \(velX) L: \(lowValue) H: \(highValue)")
 
         createEnergy()
@@ -174,7 +196,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let lowValue: Int = -Int(h/2)
         let highValue: Int = Int(h/2)
         let randomDistribution = GKRandomDistribution(lowestValue: lowValue, highestValue: highValue)
-        let energy = SKSpriteNode(imageNamed: "energy")
+        let energy = SKSpriteNode(imageNamed: "Coin2")   //"energy"
+        energy.size = CGSize(width: 55, height: 55)
         energy.position = CGPoint(x: 350, y: randomDistribution.nextInt())
         energy.name = "energy"
         energy.zPosition = 1
