@@ -15,6 +15,8 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        UIApplication.shared.isIdleTimerDisabled = true
+        
         if let view = self.view as! SKView? {
             // Load the SKScene from 'GameScene.sks'
          

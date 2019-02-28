@@ -77,10 +77,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let yRange = SKRange(lowerLimit: -self.size.height/2+10, upperLimit: self.size.height/2-10)
         
         player.constraints = [ SKConstraint.positionX(xRange), SKConstraint.positionY(yRange)  ]
-        
+
         addChild(player)
         
+        addRocketFire()
+
         physicsWorld.contactDelegate = self
+
+    }
+    
+    private func addRocketFire() {
+        if (player.childNode(withName: "rocket_fire") == nil) {
+            guard let emitter = SKEmitterNode(fileNamed: "RocketFire.sks") else { return }
+            emitter.position = CGPoint(x: -(player.size.width/2+15), y: 0)
+            emitter.name = "rocket_fire"
+            emitter.targetNode = player
+            player.addChild(emitter)
+        }
+    }
+    
+    private func removeRocketFire() {
+         if (player.childNode(withName: "rocket_fire") != nil) {
+            player.removeAllChildren()
+        }
     }
     
     private func addScoreLabel() {
@@ -166,7 +185,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             velX *= 2
             velY = 0
         }
-        
         
         enemy.physicsBody?.angularVelocity = 0
         enemy.physicsBody?.allowsRotation = false
@@ -295,6 +313,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 let changeY = CGFloat(accelerometerData.acceleration.y) * 10
                 let changeX = CGFloat(accelerometerData.acceleration.x) * 10
 
+                if(changeX < 0){
+                    addRocketFire()
+                }
+                else {
+                    removeRocketFire()
+                }
+                
                 player.position.x -= changeX
                 player.position.y += changeY
             }
@@ -369,8 +394,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             withKey:"enemyDying")
         
         if let velX = enemy.physicsBody?.velocity.dx {
-        enemy.physicsBody?.velocity = CGVector(dx: velX, dy: -50)
+            enemy.physicsBody?.velocity = CGVector(dx: velX, dy: -50)
         }
+        
+        if (enemy.childNode(withName: "smoke") == nil) {
+            guard let emitter = SKEmitterNode(fileNamed: "Smoke.sks") else { return }
+            emitter.position = CGPoint(x: 5.5, y: 20)
+            emitter.name = "smoke"
+            emitter.targetNode = enemy
+            enemy.addChild(emitter)
+        }
+        
     }
     
     func playerHit() {

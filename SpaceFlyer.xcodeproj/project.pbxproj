@@ -19,6 +19,8 @@
 		0B16C52D2222E064001B9828 /* cyborg-ninja.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0B16C52C2222E064001B9828 /* cyborg-ninja.mp3 */; };
 		0B16C52F2222E06F001B9828 /* explosion.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0B16C52E2222E06F001B9828 /* explosion.wav */; };
 		0B16C5312222E30F001B9828 /* bonus.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0B16C5302222E30E001B9828 /* bonus.wav */; };
+		0B16C5352228410E001B9828 /* Smoke.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0B16C5342228410E001B9828 /* Smoke.sks */; };
+		0B16C537222854F7001B9828 /* RocketFire.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0B16C536222854F7001B9828 /* RocketFire.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		0B16C52C2222E064001B9828 /* cyborg-ninja.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "cyborg-ninja.mp3"; sourceTree = "<group>"; };
 		0B16C52E2222E06F001B9828 /* explosion.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = explosion.wav; sourceTree = "<group>"; };
 		0B16C5302222E30E001B9828 /* bonus.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bonus.wav; sourceTree = "<group>"; };
+		0B16C5342228410E001B9828 /* Smoke.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Smoke.sks; sourceTree = "<group>"; };
+		0B16C536222854F7001B9828 /* RocketFire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = RocketFire.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +85,8 @@
 				0B16C521221C7BFE001B9828 /* LaunchScreen.storyboard */,
 				0B16C524221C7BFE001B9828 /* Info.plist */,
 				0B16C52A221C8128001B9828 /* SpaceDust.sks */,
+				0B16C5342228410E001B9828 /* Smoke.sks */,
+				0B16C536222854F7001B9828 /* RocketFire.sks */,
 			);
 			path = SpaceFlyer;
 			sourceTree = "<group>";
@@ -146,7 +152,9 @@
 				0B16C51E221C7BFC001B9828 /* Main.storyboard in Resources */,
 				0B16C515221C7BFC001B9828 /* GameScene.sks in Resources */,
 				0B16C5312222E30F001B9828 /* bonus.wav in Resources */,
+				0B16C5352228410E001B9828 /* Smoke.sks in Resources */,
 				0B16C52F2222E06F001B9828 /* explosion.wav in Resources */,
+				0B16C537222854F7001B9828 /* RocketFire.sks in Resources */,
 				0B16C520221C7BFE001B9828 /* Assets.xcassets in Resources */,
 				0B16C523221C7BFE001B9828 /* LaunchScreen.storyboard in Resources */,
 				0B16C52B221C8128001B9828 /* SpaceDust.sks in Resources */,
