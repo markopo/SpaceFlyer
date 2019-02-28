@@ -18,7 +18,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var gameTimer: Timer?
     private let interval: Double = 2.5
     private var gameTime: Int = 1
-    private var numOfAsteroids = 1
+    private var numOfenemys = 1
     
     private let lifeLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-Bold")
     private let scoreLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-Bold")
@@ -122,7 +122,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         for node in self.children {
-            if(node.name == "asteroid" || node.name == "energy") {
+            if(node.name == "enemy" || node.name == "diamond") {
                 node.removeFromParent()
             }
         }
@@ -134,7 +134,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     
     @objc
-    private func createAsteroid() {
+    private func createEnemy() {
         
         let enemyAtlas = SKTextureAtlas(named: "Sprites")
         var enemyFrames: [SKTexture] = []
@@ -151,16 +151,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let lowValue: Int = -Int(h/2)
         let highValue: Int = Int(h/2)
         let randomDistribution = GKRandomDistribution(lowestValue: lowValue, highestValue: highValue)
-        let asteroid = SKSpriteNode(texture: image) // "asteroid"
+        let enemy = SKSpriteNode(texture: image) // "enemy"
         
-        asteroid.size = CGSize(width: 98, height: 98)
-        asteroid.position = CGPoint(x: 350, y: randomDistribution.nextInt())
-        asteroid.name = "asteroid"
-        asteroid.zPosition = 1
-        addChild(asteroid)
+        enemy.size = CGSize(width: 98, height: 98)
+        enemy.position = CGPoint(x: 350, y: randomDistribution.nextInt())
+        enemy.name = "enemy"
+        enemy.zPosition = 1
+        addChild(enemy)
 
         var velX = -50 - gameTime
-        var velY = gameTime % 2 == 0 ? gameTime : -gameTime
+        var velY = 0 // gameTime % 2 == 0 ? gameTime : -gameTime
         
         if(gameTime % 5 == 0) {
             velX *= 2
@@ -168,40 +168,40 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         
-        asteroid.physicsBody?.angularVelocity = 0
-        asteroid.physicsBody?.allowsRotation = false
-        asteroid.physicsBody = SKPhysicsBody(texture: asteroid.texture!, size: asteroid.size)
-        asteroid.physicsBody?.velocity = CGVector(dx: velX, dy: velY)
-        asteroid.physicsBody?.linearDamping = 0
-        asteroid.physicsBody?.affectedByGravity = false
-        asteroid.physicsBody?.contactTestBitMask = 2
-        asteroid.physicsBody?.collisionBitMask = 2
-        asteroid.physicsBody?.categoryBitMask = 2
+        enemy.physicsBody?.angularVelocity = 0
+        enemy.physicsBody?.allowsRotation = false
+        enemy.physicsBody = SKPhysicsBody(texture: enemy.texture!, size: enemy.size)
+        enemy.physicsBody?.velocity = CGVector(dx: velX, dy: velY)
+      //  enemy.physicsBody?.linearDamping = 0
+        enemy.physicsBody?.affectedByGravity = false
+        enemy.physicsBody?.contactTestBitMask = 2
+        enemy.physicsBody?.collisionBitMask = 2
+        enemy.physicsBody?.categoryBitMask = 2
         
-        asteroid.run(SKAction.repeatForever(
+        enemy.run(SKAction.repeatForever(
                      SKAction.animate(with: enemyFrames,
                                      timePerFrame: 0.1,
                                      resize: false,
                                      restore: true)),
                              withKey:"enemyFlying")
-       //  print("asteroid: T:\(gameTime) V: \(velX) L: \(lowValue) H: \(highValue)")
+       //  print("enemy: T:\(gameTime) V: \(velX) L: \(lowValue) H: \(highValue)")
 
-        createEnergy()
+        createDiamond()
     }
     
     @objc
-    private func createEnergy() {
+    private func createDiamond() {
         
         let h = self.scene!.size.height
         let lowValue: Int = -Int(h/2)
         let highValue: Int = Int(h/2)
         let randomDistribution = GKRandomDistribution(lowestValue: lowValue, highestValue: highValue)
-        let energy = SKSpriteNode(imageNamed: "Coin2")   //"energy"
-        energy.size = CGSize(width: 55, height: 55)
-        energy.position = CGPoint(x: 350, y: randomDistribution.nextInt())
-        energy.name = "energy"
-        energy.zPosition = 1
-        addChild(energy)
+        let diamond = SKSpriteNode(imageNamed: "Coin2")   //"diamond"
+        diamond.size = CGSize(width: 55, height: 55)
+        diamond.position = CGPoint(x: 350, y: randomDistribution.nextInt())
+        diamond.name = "diamond"
+        diamond.zPosition = 1
+        addChild(diamond)
         
         var velY = 0
         var velX = -50
@@ -217,14 +217,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             angDamp = 0.5
         }
         
-        energy.physicsBody = SKPhysicsBody(texture: energy.texture!, size: energy.size)
-        energy.physicsBody?.velocity = CGVector(dx: velX, dy: velY)
-        energy.physicsBody?.linearDamping = 0
-        energy.physicsBody?.linearDamping = angDamp
-        energy.physicsBody?.affectedByGravity = false
-        energy.physicsBody?.contactTestBitMask = 2
-        energy.physicsBody?.collisionBitMask = 2
-        energy.physicsBody?.categoryBitMask = 2
+        diamond.physicsBody = SKPhysicsBody(texture: diamond.texture!, size: diamond.size)
+        diamond.physicsBody?.velocity = CGVector(dx: velX, dy: velY)
+        diamond.physicsBody?.linearDamping = 0
+        diamond.physicsBody?.linearDamping = angDamp
+        diamond.physicsBody?.affectedByGravity = false
+        diamond.physicsBody?.contactTestBitMask = 2
+        diamond.physicsBody?.collisionBitMask = 2
+        diamond.physicsBody?.categoryBitMask = 2
     }
     
     func startGame() {
@@ -237,7 +237,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         motionManager.startAccelerometerUpdates()
         
-        gameTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(createAsteroid), userInfo: nil, repeats: true)
+        gameTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
         gameTimer?.fire()
     }
     
@@ -288,7 +288,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
         
-            // remove asteroids out of screen
+            // remove enemys out of screen
             removeNodesOutOfScreen()
 
             if let accelerometerData = motionManager.accelerometerData {
@@ -307,26 +307,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         guard let nodeB = contact.bodyB.node else { return }
         
         
-        if nodeA == player && nodeB.name == "asteroid" {
+        if nodeA == player && nodeB.name == "enemy" {
+            enemyHit(enemy: nodeB)
             playerHit()
         }
-        else if(nodeA.name == "asteroid" && nodeB == player){
+        else if(nodeA.name == "enemy" && nodeB == player){
+            enemyHit(enemy: nodeA)
             playerHit()
         }
       
         
-        if(nodeA == player && nodeB.name == "energy"){
-            collectEnergy(node: nodeB)
+        if(nodeA == player && nodeB.name == "diamond"){
+            collectdiamond(node: nodeB)
         }
-        else if(nodeA.name == "energy" && nodeB == player) {
-            collectEnergy(node: nodeA)
+        else if(nodeA.name == "diamond" && nodeB == player) {
+            collectdiamond(node: nodeA)
         }
         
     }
     
     private func removeNodesOutOfScreen() {
         for node in self.children {
-            if((node.name == "asteroid" || node.name == "energy") && !self.intersects(node) && node.position.x <= (-self.position.x/2)){
+            if((node.name == "enemy" || node.name == "diamond") && !self.intersects(node) && node.position.x <= (-self.position.x/2)){
                // print("removed: \(node.name!)")
                 node.removeFromParent()
             }
@@ -334,7 +336,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func collectEnergy(node: SKNode) {
+    func collectdiamond(node: SKNode) {
         score += 1
         node.removeFromParent()
         
@@ -344,6 +346,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let bonusSound = SKAction.playSoundFileNamed("bonus.wav", waitForCompletion: false)
         run(bonusSound)
+    }
+    
+    func enemyHit(enemy: SKNode){
+        let enemyAtlas = SKTextureAtlas(named: "Sprites-1")
+        var enemyFrames: [SKTexture] = []
+        let numImages = enemyAtlas.textureNames.count
+        
+        for i in 1...numImages {
+            let textureName = "enemy1die_\(i)"
+            enemyFrames.append(enemyAtlas.textureNamed(textureName))
+        }
+        
+        let image = enemyFrames[0]
+        enemy.run(SKAction.setTexture(image), withKey: "enemy_die")
+      
+        enemy.run(SKAction.repeatForever(
+            SKAction.animate(with: enemyFrames,
+                             timePerFrame: 0.1,
+                             resize: false,
+                             restore: true)),
+            withKey:"enemyDying")
+        
+        if let velX = enemy.physicsBody?.velocity.dx {
+        enemy.physicsBody?.velocity = CGVector(dx: velX, dy: -50)
+        }
     }
     
     func playerHit() {
