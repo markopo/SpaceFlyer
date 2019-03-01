@@ -74,7 +74,7 @@ class ObjectCreator {
         diamond.zPosition = 1
         
         var velY = 0
-        var velX = -50
+        var velX = -35
         
         if(gameTime % 8 == 0) {
             let randNum = Int(arc4random_uniform(100))
@@ -108,7 +108,7 @@ class ObjectCreator {
         
         bullet.physicsBody = SKPhysicsBody(texture: bullet.texture!, size: bullet.size)
         bullet.physicsBody?.angularVelocity = 0
-        bullet.physicsBody?.velocity = CGVector(dx: +200, dy: 0)
+        bullet.physicsBody?.velocity = CGVector(dx: +225, dy: 0)
         bullet.physicsBody?.linearDamping = 0
         bullet.physicsBody?.affectedByGravity = false
         bullet.physicsBody?.contactTestBitMask = 2

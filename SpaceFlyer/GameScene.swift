@@ -18,7 +18,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var player = SKSpriteNode(imageNamed: "player-rocket.png")
     private var touchingPlayer = false
     private var gameTimer: Timer?
-    private let interval: Double = 2.5
+    private let interval: Double = 1.5
     private var gameTime: Int = 1
     private var numOfenemys = 1
     
@@ -256,8 +256,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             removeNodesOutOfScreen()
 
             if let accelerometerData = motionManager.accelerometerData {
-                let changeY = CGFloat(accelerometerData.acceleration.y) * 10
-                let changeX = CGFloat(accelerometerData.acceleration.x) * 10
+                let changeY = CGFloat(accelerometerData.acceleration.y) * 16
+                let changeX = CGFloat(accelerometerData.acceleration.x) * 8
 
                 if(changeX < 0){
                     addRocketFire()
@@ -324,7 +324,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private func removeNodesOutOfScreen() {
         for node in self.children {
-            if((node.name == "enemy" || node.name == "diamond" || node.name == "bullet") && !self.intersects(node) && node.position.x <= (-self.position.x/2)){
+            if((node.name == "enemy" || node.name == "diamond") && !self.intersects(node) && node.position.x <= (-self.position.x/2)){
                // print("removed: \(node.name!)")
                 node.removeFromParent()
                 
@@ -334,6 +334,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     }
                 }
             }
+            
+            if(node.name == "bullet" && !self.intersects(node)){
+                print("remove bullet")
+                node.removeFromParent()
+            }
         }
     }
     
@@ -341,10 +346,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         score += 3
         node.removeFromParent()
-        
-        if(life < 100) {
-            life += 1
-        }
         
         playCollectSound()
     }
