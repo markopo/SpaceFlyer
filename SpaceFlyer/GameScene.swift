@@ -170,7 +170,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let lowValue: Int = -Int(h/2)
         let highValue: Int = Int(h/2)
         let randomDistribution = GKRandomDistribution(lowestValue: lowValue, highestValue: highValue)
-        let enemy = SKSpriteNode(texture: image) // "enemy"
+        let enemy = Enemy(texture: image) // "enemy"
         
         enemy.size = CGSize(width: 98, height: 98)
         enemy.position = CGPoint(x: 350, y: randomDistribution.nextInt())
@@ -245,6 +245,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         diamond.physicsBody?.categoryBitMask = 2
     }
     
+    private func createBullet() {
+        let bullet = SKSpriteNode(imageNamed: "bullet")
+        bullet.size = CGSize(width: 21, height: 12)
+        let x = Int(player.position.x) + Int(player.size.width/2) + 25
+        let y = Int(player.position.y)
+        bullet.position = CGPoint(x: x, y: y)
+        bullet.name = "bullet"
+        bullet.zPosition = 1
+        
+        bullet.physicsBody = SKPhysicsBody(texture: bullet.texture!, size: bullet.size)
+        bullet.physicsBody?.angularVelocity = 0
+        bullet.physicsBody?.velocity = CGVector(dx: +200, dy: 0)
+        bullet.physicsBody?.linearDamping = 0
+        bullet.physicsBody?.affectedByGravity = false
+        bullet.physicsBody?.contactTestBitMask = 2
+        bullet.physicsBody?.collisionBitMask = 2
+        bullet.physicsBody?.categoryBitMask = 2
+        
+        addChild(bullet)
+        
+    }
+    
     func startGame() {
         addBackground()
         addParticles()
@@ -286,6 +308,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.removeAllChildren()
             gameOverLabel.isHidden = true
             startGame()
+        }
+        
+        if(tappedNodes.contains(player)) {
+            createBullet()
         }
     }
     
@@ -332,7 +358,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         guard let nodeB = contact.bodyB.node else { return }
         
         
-        if nodeA == player && nodeB.name == "enemy" {
+        if (nodeA == player && nodeB.name == "enemy") {
             enemyHit(enemy: nodeB)
             playerHit()
         }
@@ -340,7 +366,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             enemyHit(enemy: nodeA)
             playerHit()
         }
-      
+        
+        if(nodeA.name == "bullet" && nodeB.name == "enemy"){
+            enemyHit(enemy: nodeB)
+            bulletHit(bullet: nodeA)
+        }
+        else if(nodeA.name == "enemy" && nodeB.name == "bullet") {
+            enemyHit(enemy: nodeA)
+            bulletHit(bullet: nodeB)
+        }
         
         if(nodeA == player && nodeB.name == "diamond"){
             collectdiamond(node: nodeB)
@@ -371,6 +405,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         let bonusSound = SKAction.playSoundFileNamed("bonus.wav", waitForCompletion: false)
         run(bonusSound)
+    }
+    
+    func bulletHit(bullet: SKNode) {
+         playExplosion()
+        
+        guard let explosion = SKEmitterNode(fileNamed: "Explosion.sks") else { return }
+        explosion.position = CGPoint(x: Int(bullet.position.x), y: Int(bullet.position.y))
+        explosion.name = "explosion"
+        explosion.targetNode = self
+        self.addChild(explosion)
+        
+        bullet.removeFromParent()
+
+        self.run(SKAction.wait(forDuration: 1.25)) {
+           explosion.removeFromParent()
+        }
+
     }
     
     func enemyHit(enemy: SKNode){
@@ -405,6 +456,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             enemy.addChild(emitter)
         }
         
+        if let theEnemy = enemy as? Enemy {
+            
+            if(theEnemy.isDying == false) {
+                theEnemy.isDying = true
+            }
+            else {
+                theEnemy.removeFromParent()
+            }
+        }
+        
     }
     
     func playerHit() {
@@ -413,13 +474,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             life -= 1
         }
       
-        let explosionSound = SKAction.playSoundFileNamed("explosion.wav", waitForCompletion: false)
-        run(explosionSound)
+        playExplosion()
         
         if(life == 0) {
             player.removeFromParent()
             gameOverLabel.isHidden = false
             gameOver()
         }
+    }
+    
+    func playExplosion() {
+        let explosionSound = SKAction.playSoundFileNamed("explosion.wav", waitForCompletion: false)
+        run(explosionSound)
     }
 }

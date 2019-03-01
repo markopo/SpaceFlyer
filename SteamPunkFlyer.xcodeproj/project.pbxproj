@@ -21,10 +21,12 @@
 		0B16C5312222E30F001B9828 /* bonus.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0B16C5302222E30E001B9828 /* bonus.wav */; };
 		0B16C5352228410E001B9828 /* Smoke.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0B16C5342228410E001B9828 /* Smoke.sks */; };
 		0B16C537222854F7001B9828 /* RocketFire.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0B16C536222854F7001B9828 /* RocketFire.sks */; };
+		0B16C53922293802001B9828 /* Explosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0B16C53822293802001B9828 /* Explosion.sks */; };
+		0B16C53B222939B1001B9828 /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B16C53A222939B1001B9828 /* Enemy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0B16C50F221C7BFC001B9828 /* SpaceFlyer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpaceFlyer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0B16C50F221C7BFC001B9828 /* SteamPunkFlyer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SteamPunkFlyer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B16C512221C7BFC001B9828 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0B16C514221C7BFC001B9828 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		0B16C516221C7BFC001B9828 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
@@ -40,6 +42,8 @@
 		0B16C5302222E30E001B9828 /* bonus.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bonus.wav; sourceTree = "<group>"; };
 		0B16C5342228410E001B9828 /* Smoke.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Smoke.sks; sourceTree = "<group>"; };
 		0B16C536222854F7001B9828 /* RocketFire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = RocketFire.sks; sourceTree = "<group>"; };
+		0B16C53822293802001B9828 /* Explosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Explosion.sks; sourceTree = "<group>"; };
+		0B16C53A222939B1001B9828 /* Enemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,7 +68,7 @@
 		0B16C510221C7BFC001B9828 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0B16C50F221C7BFC001B9828 /* SpaceFlyer.app */,
+				0B16C50F221C7BFC001B9828 /* SteamPunkFlyer.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -87,6 +91,8 @@
 				0B16C52A221C8128001B9828 /* SpaceDust.sks */,
 				0B16C5342228410E001B9828 /* Smoke.sks */,
 				0B16C536222854F7001B9828 /* RocketFire.sks */,
+				0B16C53822293802001B9828 /* Explosion.sks */,
+				0B16C53A222939B1001B9828 /* Enemy.swift */,
 			);
 			path = SpaceFlyer;
 			sourceTree = "<group>";
@@ -94,9 +100,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		0B16C50E221C7BFC001B9828 /* SpaceFlyer */ = {
+		0B16C50E221C7BFC001B9828 /* SteamPunkFlyer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0B16C527221C7BFE001B9828 /* Build configuration list for PBXNativeTarget "SpaceFlyer" */;
+			buildConfigurationList = 0B16C527221C7BFE001B9828 /* Build configuration list for PBXNativeTarget "SteamPunkFlyer" */;
 			buildPhases = (
 				0B16C50B221C7BFC001B9828 /* Sources */,
 				0B16C50C221C7BFC001B9828 /* Frameworks */,
@@ -106,9 +112,9 @@
 			);
 			dependencies = (
 			);
-			name = SpaceFlyer;
+			name = SteamPunkFlyer;
 			productName = SpaceFlyer;
-			productReference = 0B16C50F221C7BFC001B9828 /* SpaceFlyer.app */;
+			productReference = 0B16C50F221C7BFC001B9828 /* SteamPunkFlyer.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -126,7 +132,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 0B16C50A221C7BFC001B9828 /* Build configuration list for PBXProject "SpaceFlyer" */;
+			buildConfigurationList = 0B16C50A221C7BFC001B9828 /* Build configuration list for PBXProject "SteamPunkFlyer" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -139,7 +145,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0B16C50E221C7BFC001B9828 /* SpaceFlyer */,
+				0B16C50E221C7BFC001B9828 /* SteamPunkFlyer */,
 			);
 		};
 /* End PBXProject section */
@@ -154,6 +160,7 @@
 				0B16C5312222E30F001B9828 /* bonus.wav in Resources */,
 				0B16C5352228410E001B9828 /* Smoke.sks in Resources */,
 				0B16C52F2222E06F001B9828 /* explosion.wav in Resources */,
+				0B16C53922293802001B9828 /* Explosion.sks in Resources */,
 				0B16C537222854F7001B9828 /* RocketFire.sks in Resources */,
 				0B16C520221C7BFE001B9828 /* Assets.xcassets in Resources */,
 				0B16C523221C7BFE001B9828 /* LaunchScreen.storyboard in Resources */,
@@ -170,6 +177,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B16C53B222939B1001B9828 /* Enemy.swift in Sources */,
 				0B16C519221C7BFC001B9828 /* GameScene.swift in Sources */,
 				0B16C51B221C7BFC001B9828 /* GameViewController.swift in Sources */,
 				0B16C513221C7BFC001B9828 /* AppDelegate.swift in Sources */,
@@ -325,7 +333,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = marko.poikkimaki.SpaceFlyer;
+				PRODUCT_BUNDLE_IDENTIFIER = marko.poikkimaki.SteamPunkFlyer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -343,7 +351,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = marko.poikkimaki.SpaceFlyer;
+				PRODUCT_BUNDLE_IDENTIFIER = marko.poikkimaki.SteamPunkFlyer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -353,7 +361,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0B16C50A221C7BFC001B9828 /* Build configuration list for PBXProject "SpaceFlyer" */ = {
+		0B16C50A221C7BFC001B9828 /* Build configuration list for PBXProject "SteamPunkFlyer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0B16C525221C7BFE001B9828 /* Debug */,
@@ -362,7 +370,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0B16C527221C7BFE001B9828 /* Build configuration list for PBXNativeTarget "SpaceFlyer" */ = {
+		0B16C527221C7BFE001B9828 /* Build configuration list for PBXNativeTarget "SteamPunkFlyer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0B16C528221C7BFE001B9828 /* Debug */,

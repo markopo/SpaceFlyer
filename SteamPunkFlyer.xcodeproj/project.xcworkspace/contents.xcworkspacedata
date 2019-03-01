@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:SpaceFlyer.xcodeproj">
+      location = "self:/Users/markopoikkimaki/Desktop/iOSCode/Projects/SpaceFlyer/SteamPunkFlyer.xcodeproj">
    </FileRef>
 </Workspace>
