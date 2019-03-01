@@ -28,18 +28,22 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Stop the invasion and reach to 1000 points!" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wSt-WA-7XE">
-                                <rect key="frame" x="54" y="185" width="290" height="26"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="AvenirNextCondensed-Regular" family="Avenir Next Condensed" pointSize="19"/>
-                                <color key="textColor" red="0.60000002379999995" green="0.60000002379999995" blue="0.60000002379999995" alpha="1" colorSpace="calibratedRGB"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" Stop the invasion and get 1000 points! Shoot the invaders! Collect diamonds to earn points! " lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wSt-WA-7XE">
+                                <rect key="frame" x="37.5" y="183.5" width="300" height="300"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="LIP-tl-p6B"/>
+                                    <constraint firstAttribute="height" constant="300" id="gWo-OX-VVR"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNextCondensed-Medium" family="Avenir Next Condensed" pointSize="21"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="wSt-WA-7XE" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="8xB-YZ-R3W"/>
                             <constraint firstItem="QBM-JT-Y7K" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="119" id="XCr-ya-akS"/>
                             <constraint firstItem="QBM-JT-Y7K" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="eVs-W1-8Iu"/>
+                            <constraint firstItem="wSt-WA-7XE" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="fap-Iu-bkV"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
