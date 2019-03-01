@@ -23,6 +23,7 @@
 		0B16C537222854F7001B9828 /* RocketFire.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0B16C536222854F7001B9828 /* RocketFire.sks */; };
 		0B16C53922293802001B9828 /* Explosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = 0B16C53822293802001B9828 /* Explosion.sks */; };
 		0B16C53B222939B1001B9828 /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B16C53A222939B1001B9828 /* Enemy.swift */; };
+		0B16C53D222949A2001B9828 /* ObjectCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B16C53C222949A2001B9828 /* ObjectCreator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		0B16C536222854F7001B9828 /* RocketFire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = RocketFire.sks; sourceTree = "<group>"; };
 		0B16C53822293802001B9828 /* Explosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Explosion.sks; sourceTree = "<group>"; };
 		0B16C53A222939B1001B9828 /* Enemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
+		0B16C53C222949A2001B9828 /* ObjectCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectCreator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 				0B16C536222854F7001B9828 /* RocketFire.sks */,
 				0B16C53822293802001B9828 /* Explosion.sks */,
 				0B16C53A222939B1001B9828 /* Enemy.swift */,
+				0B16C53C222949A2001B9828 /* ObjectCreator.swift */,
 			);
 			path = SpaceFlyer;
 			sourceTree = "<group>";
@@ -178,6 +181,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B16C53B222939B1001B9828 /* Enemy.swift in Sources */,
+				0B16C53D222949A2001B9828 /* ObjectCreator.swift in Sources */,
 				0B16C519221C7BFC001B9828 /* GameScene.swift in Sources */,
 				0B16C51B221C7BFC001B9828 /* GameViewController.swift in Sources */,
 				0B16C513221C7BFC001B9828 /* AppDelegate.swift in Sources */,

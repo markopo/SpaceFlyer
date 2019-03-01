@@ -13,7 +13,9 @@ import CoreMotion
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
-    private let player = SKSpriteNode(imageNamed: "player-rocket.png")
+    public let objectCreator = ObjectCreator()
+    
+    private var player = SKSpriteNode(imageNamed: "player-rocket.png")
     private var touchingPlayer = false
     private var gameTimer: Timer?
     private let interval: Double = 2.5
@@ -25,13 +27,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let gameOverLabel = SKLabelNode(fontNamed: "AvenirNextCondensed-Bold")
     private let music = SKAudioNode(fileNamed: "cyborg-ninja.mp3")
 
-    
     private let motionManager = CMMotionManager()
-   
     
     var score = 0 {
         didSet {
               scoreLabel.text = "Score: \(score)"
+
+                if(score >= 1000) {
+                    gameWon()
+                }
         }
     }
     
@@ -62,21 +66,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     private func addPlayer() {
-        player.alpha = 1.0
-        player.position.x = -player.size.width
-        player.zPosition = 1
-        player.physicsBody = SKPhysicsBody(texture: player.texture!, size: player.size)
-        player.physicsBody?.angularVelocity = 0
-        player.physicsBody?.allowsRotation = false 
-        player.physicsBody?.categoryBitMask = 3
-        player.physicsBody?.collisionBitMask = 3
-        player.physicsBody?.contactTestBitMask = 3
-        player.physicsBody?.affectedByGravity = false
-        
-        let xRange = SKRange(lowerLimit: -self.size.width/2+10, upperLimit: self.size.width/2-10)
-        let yRange = SKRange(lowerLimit: -self.size.height/2+10, upperLimit: self.size.height/2-10)
-        
-        player.constraints = [ SKConstraint.positionX(xRange), SKConstraint.positionY(yRange)  ]
+       
 
         addChild(player)
         
@@ -150,124 +140,56 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         music.run(SKAction.pause())
     }
     
-    
-    
-    @objc
-    private func createEnemy() {
+    private func gameWon() {
+        gameTime = 1
+        gameOverLabel.text = "YOU WIN!"
+        gameOverLabel.name = "game_over"
+        gameOverLabel.position.x = 0
+        gameOverLabel.position.y = 0
+        gameOverLabel.zPosition = 3
         
-        let enemyAtlas = SKTextureAtlas(named: "Sprites")
-        var enemyFrames: [SKTexture] = []
-        let numImages = enemyAtlas.textureNames.count
-        
-        for i in 1...numImages {
-            let textureName = "enemy1fly_\(i)"
-            enemyFrames.append(enemyAtlas.textureNamed(textureName))
+        if(self.childNode(withName: "game_over") == nil) {
+            addChild(gameOverLabel)
         }
         
-        let image = enemyFrames[0]
-        gameTime += 1
-        let h = self.scene!.size.height
-        let lowValue: Int = -Int(h/2)
-        let highValue: Int = Int(h/2)
-        let randomDistribution = GKRandomDistribution(lowestValue: lowValue, highestValue: highValue)
-        let enemy = Enemy(texture: image) // "enemy"
-        
-        enemy.size = CGSize(width: 98, height: 98)
-        enemy.position = CGPoint(x: 350, y: randomDistribution.nextInt())
-        enemy.name = "enemy"
-        enemy.zPosition = 1
-        addChild(enemy)
-
-        var velX = -50 - gameTime
-        var velY = 0 // gameTime % 2 == 0 ? gameTime : -gameTime
-        
-        if(gameTime % 5 == 0) {
-            velX *= 2
-            velY = 0
+        for node in self.children {
+            if(node.name == "enemy" || node.name == "diamond") {
+                node.removeFromParent()
+            }
         }
         
-        enemy.physicsBody?.angularVelocity = 0
-        enemy.physicsBody?.allowsRotation = false
-        enemy.physicsBody = SKPhysicsBody(texture: enemy.texture!, size: enemy.size)
-        enemy.physicsBody?.velocity = CGVector(dx: velX, dy: velY)
-      //  enemy.physicsBody?.linearDamping = 0
-        enemy.physicsBody?.affectedByGravity = false
-        enemy.physicsBody?.contactTestBitMask = 2
-        enemy.physicsBody?.collisionBitMask = 2
-        enemy.physicsBody?.categoryBitMask = 2
-        
-        enemy.run(SKAction.repeatForever(
-                     SKAction.animate(with: enemyFrames,
-                                     timePerFrame: 0.1,
-                                     resize: false,
-                                     restore: true)),
-                             withKey:"enemyFlying")
-       //  print("enemy: T:\(gameTime) V: \(velX) L: \(lowValue) H: \(highValue)")
-
-        createDiamond()
+        gameTimer?.invalidate()
+        music.run(SKAction.pause())
     }
     
-    @objc
-    private func createDiamond() {
-        
-        let h = self.scene!.size.height
-        let lowValue: Int = -Int(h/2)
-        let highValue: Int = Int(h/2)
-        let randomDistribution = GKRandomDistribution(lowestValue: lowValue, highestValue: highValue)
-        let diamond = SKSpriteNode(imageNamed: "Coin2")   //"diamond"
-        diamond.size = CGSize(width: 55, height: 55)
-        diamond.position = CGPoint(x: 350, y: randomDistribution.nextInt())
-        diamond.name = "diamond"
-        diamond.zPosition = 1
-        addChild(diamond)
-        
-        var velY = 0
-        var velX = -50
-        
-        if(gameTime % 8 == 0) {
-            let randNum = Int(arc4random_uniform(100))
-            velY = gameTime % 2 == 0 ? -randNum : randNum
-            velX = -20
-        }
-        
-        var angDamp: CGFloat = 0.0
-        if(gameTime % 12 == 0){
-            angDamp = 0.5
-        }
-        
-        diamond.physicsBody = SKPhysicsBody(texture: diamond.texture!, size: diamond.size)
-        diamond.physicsBody?.velocity = CGVector(dx: velX, dy: velY)
-        diamond.physicsBody?.linearDamping = 0
-        diamond.physicsBody?.linearDamping = angDamp
-        diamond.physicsBody?.affectedByGravity = false
-        diamond.physicsBody?.contactTestBitMask = 2
-        diamond.physicsBody?.collisionBitMask = 2
-        diamond.physicsBody?.categoryBitMask = 2
-    }
+    
     
     private func createBullet() {
-        let bullet = SKSpriteNode(imageNamed: "bullet")
-        bullet.size = CGSize(width: 21, height: 12)
         let x = Int(player.position.x) + Int(player.size.width/2) + 25
         let y = Int(player.position.y)
-        bullet.position = CGPoint(x: x, y: y)
-        bullet.name = "bullet"
-        bullet.zPosition = 1
-        
-        bullet.physicsBody = SKPhysicsBody(texture: bullet.texture!, size: bullet.size)
-        bullet.physicsBody?.angularVelocity = 0
-        bullet.physicsBody?.velocity = CGVector(dx: +200, dy: 0)
-        bullet.physicsBody?.linearDamping = 0
-        bullet.physicsBody?.affectedByGravity = false
-        bullet.physicsBody?.contactTestBitMask = 2
-        bullet.physicsBody?.collisionBitMask = 2
-        bullet.physicsBody?.categoryBitMask = 2
-        
+        let bullet = objectCreator.createBullet(x: x, y: y)
         addChild(bullet)
+    }
+    
+    @objc
+    func gameInterval() {
+        gameTime += 1
+        let h = Int(self.scene!.size.height)
+        
+        let enemy = objectCreator.createEnemy(gameTime: gameTime, h: h)
+        addChild(enemy)
+        
+        let diamond = objectCreator.createDiamond(gameTime: gameTime, h: h)
+        addChild(diamond)
+        
         
     }
     
     func startGame() {
+        let xRange = SKRange(lowerLimit: -self.size.width/2+10, upperLimit: self.size.width/2-10)
+        let yRange = SKRange(lowerLimit: -self.size.height/2+10, upperLimit: self.size.height/2-10)
+        player = objectCreator.createPlayer(xRange: xRange, yRange: yRange)
+        
         addBackground()
         addParticles()
         addPlayer()
@@ -277,7 +199,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         motionManager.startAccelerometerUpdates()
         
-        gameTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
+        gameTimer = Timer.scheduledTimer(timeInterval: interval, target: self, selector: #selector(gameInterval), userInfo: nil, repeats: true)
         gameTimer?.fire()
     }
     
@@ -286,9 +208,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func touchDown(atPoint pos : CGPoint) {
-      
-        
-        
+
     }
     
     func touchMoved(toPoint pos : CGPoint) {
@@ -357,7 +277,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         guard let nodeA = contact.bodyA.node else { return }
         guard let nodeB = contact.bodyB.node else { return }
         
-        
+        // Enemy hit
         if (nodeA == player && nodeB.name == "enemy") {
             enemyHit(enemy: nodeB)
             playerHit()
@@ -367,6 +287,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             playerHit()
         }
         
+        // Bullet hit
         if(nodeA.name == "bullet" && nodeB.name == "enemy"){
             enemyHit(enemy: nodeB)
             bulletHit(bullet: nodeA)
@@ -376,6 +297,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             bulletHit(bullet: nodeB)
         }
         
+        if((nodeA.name == "bullet" && nodeB.name == "diamond") || (nodeA.name == "diamond" && nodeB.name == "bullet")){
+            let x = Int(nodeA.position.x)
+            let y = Int(nodeA.position.y)
+            
+            nodeA.removeFromParent()
+            nodeB.removeFromParent()
+
+            if(score > 0) {
+                score -= 1
+            }
+            
+            playExplosion(x: x, y: y)
+        }
+        
+        
+        // Diamond hit
         if(nodeA == player && nodeB.name == "diamond"){
             collectdiamond(node: nodeB)
         }
@@ -387,44 +324,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private func removeNodesOutOfScreen() {
         for node in self.children {
-            if((node.name == "enemy" || node.name == "diamond") && !self.intersects(node) && node.position.x <= (-self.position.x/2)){
+            if((node.name == "enemy" || node.name == "diamond" || node.name == "bullet") && !self.intersects(node) && node.position.x <= (-self.position.x/2)){
                // print("removed: \(node.name!)")
                 node.removeFromParent()
+                
+                if(node.name == "enemy") {
+                    if(score > 0){
+                        score -= 1
+                    }
+                }
             }
-            
         }
     }
     
     func collectdiamond(node: SKNode) {
-        score += 1
+        
+        score += 3
         node.removeFromParent()
         
-        if(life <= 100) {
+        if(life < 100) {
             life += 1
         }
         
-        let bonusSound = SKAction.playSoundFileNamed("bonus.wav", waitForCompletion: false)
-        run(bonusSound)
+        playCollectSound()
     }
     
     func bulletHit(bullet: SKNode) {
-         playExplosion()
-        
-        guard let explosion = SKEmitterNode(fileNamed: "Explosion.sks") else { return }
-        explosion.position = CGPoint(x: Int(bullet.position.x), y: Int(bullet.position.y))
-        explosion.name = "explosion"
-        explosion.targetNode = self
-        self.addChild(explosion)
-        
-        bullet.removeFromParent()
-
-        self.run(SKAction.wait(forDuration: 1.25)) {
-           explosion.removeFromParent()
-        }
-
+         playExplosion(x: Int(bullet.position.x), y: Int(bullet.position.y))
+         bullet.removeFromParent()
     }
     
     func enemyHit(enemy: SKNode){
+        score += 1
+        
         let enemyAtlas = SKTextureAtlas(named: "Sprites-1")
         var enemyFrames: [SKTexture] = []
         let numImages = enemyAtlas.textureNames.count
@@ -474,7 +406,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             life -= 1
         }
       
-        playExplosion()
+        playExplosion(x: Int(player.position.x), y: Int(player.position.y))
         
         if(life == 0) {
             player.removeFromParent()
@@ -483,8 +415,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func playExplosion() {
+    func playExplosion(x: Int, y: Int) {
         let explosionSound = SKAction.playSoundFileNamed("explosion.wav", waitForCompletion: false)
         run(explosionSound)
+        
+        guard let explosion = SKEmitterNode(fileNamed: "Explosion.sks") else { return }
+        explosion.position = CGPoint(x: x, y: y)
+        explosion.name = "explosion"
+        explosion.targetNode = self
+        self.addChild(explosion)
+        
+        self.run(SKAction.wait(forDuration: 1.25)) {
+            explosion.removeFromParent()
+        }
+    }
+    
+    func playCollectSound() {
+        let bonusSound = SKAction.playSoundFileNamed("bonus.wav", waitForCompletion: false)
+        run(bonusSound)
     }
 }
