@@ -124,6 +124,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameOverLabel.position.x = 0
         gameOverLabel.position.y = 0
         gameOverLabel.zPosition = 3
+        gameOverLabel.isHidden = false
         
         if(self.childNode(withName: "game_over") == nil) {
             addChild(gameOverLabel)
@@ -146,6 +147,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameOverLabel.position.x = 0
         gameOverLabel.position.y = 0
         gameOverLabel.zPosition = 3
+        gameOverLabel.isHidden = false
         
         if(self.childNode(withName: "game_over") == nil) {
             addChild(gameOverLabel)
@@ -390,8 +392,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         if let theEnemy = enemy as? Enemy {
-            
-            print("hit")
+
             theEnemy.life -= 1
             
             if(theEnemy.life <= 0) {
@@ -411,7 +412,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if(life == 0) {
             player.removeFromParent()
-            gameOverLabel.isHidden = false
             gameOver()
         }
     }
