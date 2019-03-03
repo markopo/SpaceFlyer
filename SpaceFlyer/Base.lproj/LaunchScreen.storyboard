@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina4_7" orientation="portrait">
+    <device id="ipad9_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -15,21 +15,20 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="background_all" translatesAutoresizingMaskIntoConstraints="NO" id="QaM-1Y-ndX">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background_all" translatesAutoresizingMaskIntoConstraints="NO" id="QaM-1Y-ndX">
+                                <rect key="frame" x="64" y="32" width="640" height="960"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Steam Punk Flyer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QBM-JT-Y7K">
-                                <rect key="frame" x="54" y="125" width="266" height="52"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Steam Punk Flyer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QBM-JT-Y7K">
+                                <rect key="frame" x="251" y="139" width="266" height="52"/>
                                 <fontDescription key="fontDescription" name="AvenirNextCondensed-Bold" family="Avenir Next Condensed" pointSize="38"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" Stop the invasion and get 1000 points! Shoot the invaders! Collect diamonds to earn points! " lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wSt-WA-7XE">
-                                <rect key="frame" x="37.5" y="183.5" width="300" height="300"/>
+                                <rect key="frame" x="234" y="362" width="300" height="300"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="LIP-tl-p6B"/>
                                     <constraint firstAttribute="height" constant="300" id="gWo-OX-VVR"/>
@@ -38,12 +37,15 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.77928513288497925" green="0.94346815347671509" blue="0.98409801721572876" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="wSt-WA-7XE" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="8xB-YZ-R3W"/>
+                            <constraint firstItem="QBM-JT-Y7K" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="CS7-52-9N8"/>
+                            <constraint firstItem="QaM-1Y-ndX" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="KnG-RE-SZj"/>
                             <constraint firstItem="QBM-JT-Y7K" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="119" id="XCr-ya-akS"/>
                             <constraint firstItem="QBM-JT-Y7K" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="eVs-W1-8Iu"/>
                             <constraint firstItem="wSt-WA-7XE" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="fap-Iu-bkV"/>
+                            <constraint firstItem="QaM-1Y-ndX" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="y6O-St-eLw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>

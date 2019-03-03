@@ -15,10 +15,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     public let objectCreator = ObjectCreator()
     
-    private var player = SKSpriteNode(imageNamed: "player-rocket.png")
+    private var player = Player(imageNamed: "player-rocket.png")
     private var touchingPlayer = false
     private var gameTimer: Timer?
-    private let interval: Double = 1.5
+    private let interval: Double = 1.25
     private var gameTime: Int = 1
     private var numOfenemys = 1
     
@@ -28,6 +28,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private let music = SKAudioNode(fileNamed: "cyborg-ninja.mp3")
 
     private let motionManager = CMMotionManager()
+    
+    private let offSetX: CGFloat = 42.0
+    private let offSetY: CGFloat = 35.0
     
     var score = 0 {
         didSet {
@@ -66,12 +69,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     private func addPlayer() {
-       
-
         addChild(player)
-        
         addRocketFire()
-
         physicsWorld.contactDelegate = self
 
     }
@@ -186,8 +185,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func startGame() {
-        let xRange = SKRange(lowerLimit: -self.size.width/2+10, upperLimit: self.size.width/2-10)
-        let yRange = SKRange(lowerLimit: -self.size.height/2+10, upperLimit: self.size.height/2-10)
+        let xRange = SKRange(lowerLimit: -(self.size.width/2) + offSetX, upperLimit: (self.size.width/2) - offSetX)
+        let yRange = SKRange(lowerLimit: -(self.size.height/2) + offSetY, upperLimit: (self.size.height/2) - offSetY)
         player = objectCreator.createPlayer(xRange: xRange, yRange: yRange)
         
         addBackground()
@@ -224,15 +223,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let location = touch.location(in: self)
         let tappedNodes = nodes(at: location)
         
+        
         if(tappedNodes.contains(gameOverLabel)) {
             self.removeAllChildren()
             gameOverLabel.isHidden = true
             startGame()
         }
         
-        if(tappedNodes.contains(player)) {
+      //  if(tappedNodes.contains(player)) {
             createBullet()
-        }
+      //  }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -336,7 +336,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
             if(node.name == "bullet" && !self.intersects(node)){
-                print("remove bullet")
+               // print("remove bullet")
                 node.removeFromParent()
             }
         }
@@ -391,10 +391,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if let theEnemy = enemy as? Enemy {
             
-            if(theEnemy.isDying == false) {
-                theEnemy.isDying = true
-            }
-            else {
+            print("hit")
+            theEnemy.life -= 1
+            
+            if(theEnemy.life <= 0) {
                 theEnemy.removeFromParent()
             }
         }

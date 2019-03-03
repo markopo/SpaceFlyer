@@ -62,12 +62,12 @@ class ObjectCreator {
         return enemy   
     }
     
-    public func createDiamond(gameTime: Int, h: Int) -> SKNode {
+    public func createDiamond(gameTime: Int, h: Int) -> Diamond {
         
         let lowValue: Int = -Int(h/2)
         let highValue: Int = Int(h/2)
         let randomDistribution = GKRandomDistribution(lowestValue: lowValue, highestValue: highValue)
-        let diamond = SKSpriteNode(imageNamed: "Coin2")   //"diamond"
+        let diamond = Diamond(imageNamed: "Coin2")   //"diamond"
         diamond.size = CGSize(width: 55, height: 55)
         diamond.position = CGPoint(x: 350, y: randomDistribution.nextInt())
         diamond.name = "diamond"
@@ -99,8 +99,8 @@ class ObjectCreator {
         return diamond
     }
     
-    public func createBullet(x: Int, y: Int) -> SKNode {
-        let bullet = SKSpriteNode(imageNamed: "bullet")
+    public func createBullet(x: Int, y: Int) -> Bullet{
+        let bullet = Bullet(imageNamed: "bullet")
         bullet.size = CGSize(width: 21, height: 12)
         bullet.position = CGPoint(x: x, y: y)
         bullet.name = "bullet"
@@ -118,8 +118,8 @@ class ObjectCreator {
         return bullet 
     }
     
-    public func createPlayer(xRange: SKRange, yRange: SKRange) -> SKSpriteNode {
-        let player = SKSpriteNode(imageNamed: "player-rocket.png")
+    public func createPlayer(xRange: SKRange, yRange: SKRange) -> Player {
+        let player = Player(imageNamed: "player-rocket.png")
         player.alpha = 1.0
         player.position.x = -player.size.width
         player.zPosition = 1
